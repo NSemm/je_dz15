@@ -3,7 +3,7 @@ package com.k7.service;
 import com.k7.contacts.Contact;
 import com.k7.contacts.ContactsList;
 
-public class InMemoryContactsService implements ContactsService{
+public class InMemoryContactsService implements ContactsService {
     private ContactsList contactsList = new ContactsList();
 
     @Override

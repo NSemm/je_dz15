@@ -13,6 +13,7 @@ public class SearchByNameContactsMenuAction implements MenuAction {
 
     @Override
     public void doAction() {
+        try{
         int num = 0;
         System.out.println("Enter the begining of contact name");
         String search = sc.nextLine();
@@ -21,6 +22,9 @@ public class SearchByNameContactsMenuAction implements MenuAction {
             System.out.println(++num + ". " + contact.toString());
         }
         System.out.println("------------------------");
+        }catch (NullPointerException e) {
+            System.out.println("No contacts");
+        }
     }
 
     @Override

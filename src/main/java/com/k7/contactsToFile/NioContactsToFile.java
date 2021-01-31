@@ -21,16 +21,30 @@ public class NioContactsToFile implements ContactsToFile {
     @Override
     public void read() {
         try (SeekableByteChannel channel = Files.newByteChannel(Path.of("src/main/resources/contacts.txt"))) {
-            ByteBuffer buffer = ByteBuffer.allocate(1024);
-            channel.read(buffer);
-            buffer.flip();
-            for (String s : new String(buffer.array(), 0, buffer.limit()).split("\n")) {
-                contactsService.add(parse(s));
+            ByteBuffer buffer = ByteBuffer.allocate(150);
+            String in = "";
+            while (channel.read(buffer) != -1) {
+                buffer.flip();
+                in += getStringFromBuffer(buffer);
+                String[] strParts = in.split("\n");
+                for (int i = 0; i < strParts.length - 1; i++) {
+                   // System.out.println("strParts[" + i + "]: " + strParts[i]);
+                    contactsService.add(parse(strParts[i]));
+                }
+                in = strParts[strParts.length - 1];
+               // System.out.println("in: " + in);
+                buffer.clear();
             }
-            buffer.clear();
-        } catch (IOException e) {
+            if (parse(in)!=null)
+            contactsService.add(parse(in));
+        } catch (
+                IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getStringFromBuffer(ByteBuffer buffer) {
+        return new String(buffer.array(), buffer.position(), buffer.limit());
     }
 
     @Override
